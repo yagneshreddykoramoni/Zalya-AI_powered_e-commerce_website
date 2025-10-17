@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .chat-container { border: 1px solid #ccc; padding: 20px; height: 400px; overflow-y: scroll; }
+        .input-container { margin-top: 20px; display: flex; }
+        input { flex: 1; padding: 10px; }
+        button { padding: 10px 20px; background: #0066ff; color: white; border: none; cursor: pointer; }
+        .message { margin-bottom: 10px; padding: 10px; border-radius: 5px; }
+        .user { background-color: #e6f2ff; text-align: right; }
+        .bot { background-color: #f1f1f1; }
+    </style>
+</head>
+<body>
+    <h1>AI Chat Test</h1>
+    <div class="chat-container" id="chatContainer"></div>
+    <div class="input-container">
+        <input type="text" id="messageInput" placeholder="Type a message...">
+        <button id="sendButton">Send</button>
+    </div>
+
+    <script>
+        // Elements
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        
+        // Chat history
+        const chatHistory = [
+            {
+                id: '1',
+                text: "Hello! I'm your fashion assistant. How can I help you today?",
+                sender: 'bot',
+                timestamp: new Date()
+            }
+        ];
+        
+        // Initialize chat
+        function initChat() {
+            chatHistory.forEach(msg => {
+                addMessageToUI(msg.text, msg.sender);
+            });
+        }
+        
+        // Add message to UI
+        function addMessageToUI(text, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', sender);
+            messageElement.textContent = text;
+            chatContainer.appendChild(messageElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Send message
+        async function sendMessage() {
+            const messageText = messageInput.value.trim();
+            if (!messageText) return;
+            
+            // Add user message to UI
+            addMessageToUI(messageText, 'user');
+            
+            // Add to chat history
+            chatHistory.push({
+                id: Date.now().toString(),
+                text: messageText,
+                sender: 'user',
+                timestamp: new Date()
+            });
+            
+            // Clear input
+            messageInput.value = '';
+            
+            try {
+                // Show loading indicator
+                const loadingElement = document.createElement('div');
+                loadingElement.classList.add('message', 'bot');
+                loadingElement.textContent = 'Thinking...';
+                chatContainer.appendChild(loadingElement);
+                
+                // Send to API
+                const response = await fetch('http://localhost:5000/api/ai/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        query: messageText,
+                        chatHistory: chatHistory
+                    })
+                });
+                
+                // Remove loading indicator
+                chatContainer.removeChild(loadingElement);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Add bot response to UI
+                addMessageToUI(data.message, 'bot');
+                
+                // Add to chat history
+                chatHistory.push({
+                    id: Date.now().toString(),
+                    text: data.message,
+                    sender: 'bot',
+                    timestamp: new Date()
+                });
+                
+                // Log products if any
+                if (data.products && data.products.length > 0) {
+                    console.log('Products suggested:', data.products);
+                    
+                    // Add product info to UI
+                    const productsElement = document.createElement('div');
+                    productsElement.classList.add('message', 'bot');
+                    productsElement.innerHTML = `<strong>Products suggested:</strong><br>` +
+                        data.products.map(p => `${p.name} - $${p.price}`).join('<br>');
+                    chatContainer.appendChild(productsElement);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                addMessageToUI('Sorry, I encountered an error. Please try again.', 'bot');
+            }
+        }
+        
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', event => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Initialize
+        initChat();
+    </script>
+</body>
+</html>
