@@ -150,16 +150,16 @@ npm run dev
 
 ---
 
+Ah! That happens because GitHub’s plain text will wrap lines automatically, but if you want each piece of developer info on its **own line**, you need to **manually put line breaks**. Here’s the corrected **Developer section**:
+
+---
+
 **Developer** 👨‍💻
 
 K. Yagnesh Reddy
-
 B.Tech (CSE - Data Science), Institute of Aeronautical Engineering, Hyderabad
-
 Email: [yagneshreddykoramoni@gmail.com](mailto:yagneshreddykoramoni@gmail.com)
-
 Portfolio: [https://yagneshreddy.vercel.app/](https://yagneshreddy.vercel.app/)
-
 LinkedIn: [https://www.linkedin.com/in/yagnesh-reddy-koramoni-a8b0a2259/](https://www.linkedin.com/in/yagnesh-reddy-koramoni-a8b0a2259/)
-
 GitHub: [https://github.com/yagneshreddykoramoni](https://github.com/yagneshreddykoramoni)
+
