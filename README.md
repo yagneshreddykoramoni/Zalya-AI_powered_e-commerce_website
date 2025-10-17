@@ -132,10 +132,8 @@ npm run dev
 
 **Future Enhancements** 🔮
 
-* AI Voice-based Product Search 🗣️
 * AR-based Virtual Try-On for mobile 📱
 * Personalized Shopping Feeds and Trends 📰
-* AI Analytics for Admins (Sales Insights, Product Trends) 📊
 
 ---
 
