@@ -11,10 +11,25 @@ const { setSocket } = require('./utils/socket');
 const app = express();
 const server = http.createServer(app);
 
+const defaultOrigins = ['http://localhost:8080', 'http://127.0.0.1:8080'];
+const configuredOrigins = [
+  process.env.CLIENT_URL,
+  process.env.ADMIN_URL,
+  process.env.FRONTEND_URL,
+  process.env.ADDITIONAL_ORIGINS,
+  'https://zalya.vercel.app'
+]
+  .filter(Boolean)
+  .flatMap((origin) => origin.split(',')
+    .map((value) => value.trim())
+    .filter(Boolean));
+
+const allowedOrigins = Array.from(new Set([...defaultOrigins, ...configuredOrigins]));
+
 // Initialize Socket.io
 const io = socketIo(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:8080",
+    origin: allowedOrigins,
     methods: ["GET", "POST"]
   }
 });
@@ -24,7 +39,12 @@ setSocket(io);
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:8080', 'http://127.0.0.1:8080'],
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error(`Not allowed by CORS: ${origin}`));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
