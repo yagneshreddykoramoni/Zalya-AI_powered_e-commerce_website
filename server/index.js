@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -99,11 +100,17 @@ app.use('/api/ai', require('./routes/aiChat'));
 app.use('/api/style-suggestions', require('./routes/styleSuggestions'));
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/dist')));
+  const clientBuildPath = path.join(__dirname, '../client/dist');
 
-  app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-  });
+  if (fs.existsSync(clientBuildPath)) {
+    app.use(express.static(clientBuildPath));
+
+    app.get(/.*/, (req, res) => {
+      res.sendFile(path.join(clientBuildPath, 'index.html'));
+    });
+  } else {
+    console.warn('Client build directory not found; skipping static file hosting.');
+  }
 }
 
 const PORT = process.env.PORT || 5000;
