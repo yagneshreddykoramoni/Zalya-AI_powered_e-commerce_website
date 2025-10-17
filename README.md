@@ -128,5 +128,3 @@ Email: [yagneshreddykoramoni@gmail.com](mailto:yagneshreddykoramoni@gmail.com)
 Portfolio: [https://yagneshreddy.vercel.app/](https://yagneshreddy.vercel.app/)
 LinkedIn: [https://www.linkedin.com/in/yagnesh-reddy-koramoni-a8b0a2259/](https://www.linkedin.com/in/yagnesh-reddy-koramoni-a8b0a2259/)
 GitHub: [https://github.com/yagneshreddykoramoni](https://github.com/yagneshreddykoramoni)
-
-Do you want me to do that?
