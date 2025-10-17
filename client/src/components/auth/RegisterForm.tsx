@@ -8,6 +8,7 @@ import { Button } from '../ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import api from '@/services/api';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -32,19 +33,7 @@ const RegisterForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
-      }
+      const { data } = await api.post('/auth/register', values);
 
       // Store token in localStorage
       localStorage.setItem('token', data.token);
@@ -65,7 +54,7 @@ const RegisterForm = () => {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="John Doe" {...field} />
+                <Input placeholder="Johny Karthik" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -78,7 +67,7 @@ const RegisterForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="johndoe@example.com" {...field} />
+                <Input placeholder="johnykarthik@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -1,4 +1,4 @@
-import api from './api';
+import api, { API_BASE_URL } from './api';
 
 // Types
 export interface ChatMessage {
@@ -136,23 +136,9 @@ const aiChatService = {
    */
   sendMessage: async (request: ChatRequest): Promise<ChatResponse> => {
     try {
-      console.log('Sending chat request to AI:', request); 
-      console.log('API Base URL:', import.meta.env.VITE_API_URL || 'http://localhost:5000/api');
-      
-      // Try with direct fetch instead of axios to test
-      const response = await fetch('http://localhost:5000/api/ai/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(request)
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
+      console.log('Sending chat request to AI:', request);
+
+      const { data } = await api.post('/ai/chat', request);
       console.log('Received AI response:', data);
       return data;
     } catch (error) {
@@ -171,7 +157,7 @@ const aiChatService = {
    */
   getOutfitSuggestions: async (productId: string): Promise<OutfitSuggestionsResponse> => {
     try {
-      const response = await api.get(`/api/ai/outfit-suggestions/${productId}`);
+      const response = await api.get(`/ai/outfit-suggestions/${productId}`);
       return response.data;
     } catch (error) {
       console.error('Error getting outfit suggestions:', error);
@@ -184,20 +170,34 @@ const aiChatService = {
    */
   fashionRecognition: async (request: FashionRecognitionRequest): Promise<FashionRecognitionResponse> => {
     try {
-      const response = await fetch('http://localhost:5000/api/ai/fashion', {
+      const endpoint = `${API_BASE_URL}/ai/fashion`;
+      const formData = new FormData();
+
+      const base64Data = request.image.startsWith('data:')
+        ? request.image.split(',')[1]
+        : request.image;
+
+      const mimeMatch = request.image.match(/^data:(.*?);base64,/);
+      const mimeType = mimeMatch ? mimeMatch[1] : 'image/png';
+      const binary = atob(base64Data);
+      const array = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) {
+        array[i] = binary.charCodeAt(i);
+      }
+
+      const blob = new Blob([array], { type: mimeType });
+      formData.append('image', blob, `upload.${mimeType.split('/')[1] || 'png'}`);
+
+      const response = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(request)
+        body: formData,
       });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
-      return data;
+      return response.json();
     } catch (error) {
       console.error('Error in fashion recognition:', error);
       throw error;

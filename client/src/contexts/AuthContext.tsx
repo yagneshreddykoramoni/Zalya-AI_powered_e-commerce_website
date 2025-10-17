@@ -91,7 +91,9 @@ export const useAuth = () => {
   return context;
 };
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? 'http://localhost:5000/api' : 'https://zalya-backend.onrender.com/api');
 const SESSION_DURATION_MS = 2 * 60 * 60 * 1000; // 2 hours
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -155,8 +157,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsCartLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-      const response = await fetch(`${apiBaseUrl}/auth/cart`, {
+  const response = await fetch(`${API_BASE_URL}/auth/cart`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -227,7 +228,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const token = localStorage.getItem('token');
       if (!token) throw new Error('No authentication token found');
   
-      const response = await fetch('http://localhost:5000/api/auth/cart/add', {
+  const response = await fetch(`${API_BASE_URL}/auth/cart/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -279,7 +280,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const token = localStorage.getItem('token');
       if (!token) throw new Error('No authentication token found');
 
-      const response = await fetch('http://localhost:5000/api/auth/cart/remove', {
+  const response = await fetch(`${API_BASE_URL}/auth/cart/remove`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -325,7 +326,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const token = localStorage.getItem('token');
       if (!token) throw new Error('No authentication token found');
 
-      const response = await fetch('http://localhost:5000/api/auth/cart/update-quantity', {
+  const response = await fetch(`${API_BASE_URL}/auth/cart/update-quantity`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -363,7 +364,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const token = localStorage.getItem('token');
       if (!token) throw new Error('No authentication token found');
 
-      const response = await fetch('http://localhost:5000/api/auth/cart/clear', {
+  const response = await fetch(`${API_BASE_URL}/auth/cart/clear`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -392,9 +393,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string, type: 'user' | 'admin' = 'user') => {
     setIsLoading(true);
     try {
-      const endpoint = type === 'admin' 
-        ? 'http://localhost:5000/api/auth/admin/login' 
-        : 'http://localhost:5000/api/auth/login';
+      const endpoint = type === 'admin'
+        ? `${API_BASE_URL}/auth/admin/login`
+        : `${API_BASE_URL}/auth/login`;
       
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -461,7 +462,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (name: string, email: string, password: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+  const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
@@ -525,7 +526,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const token = localStorage.getItem('token');
       if (!token) throw new Error('No authentication token found');
       
-      const response = await fetch('http://localhost:5000/api/auth/profile', {
+  const response = await fetch(`${API_BASE_URL}/auth/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

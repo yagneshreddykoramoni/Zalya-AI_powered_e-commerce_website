@@ -16,6 +16,7 @@ import { ProfilePicture } from '@/components/ProfilePicture';
 import { ProfilePictureUpload } from '@/components/ProfilePictureUpload';
 import { format } from 'date-fns';
 import { toast } from '@/hooks/use-toast';
+import api from '@/services/api';
 
 const Profile = () => {
   const { user, isAuthenticated, logout, updateProfile } = useAuth();
@@ -151,24 +152,9 @@ const Profile = () => {
   const handleSaveLocalPreferences = async () => {
       setIsSaving(true);
       try {
-          const response = await fetch('http://localhost:5000/api/auth/profile', { // Updated endpoint
-              method: 'PUT',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${localStorage.getItem('token')}`
-              },
-              body: JSON.stringify({
-                  preferences: localPreferences
-              })
+          const { data } = await api.put('/auth/profile', {
+              preferences: localPreferences
           });
-  
-          if (!response.ok) {
-              const errorData = await response.text();
-              console.error('Server response:', errorData);
-              throw new Error('Failed to save preferences');
-          }
-  
-          const data = await response.json();
           
           // Update the user context with new preferences
           if (data.user) {

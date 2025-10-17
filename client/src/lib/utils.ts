@@ -13,7 +13,10 @@ export function getImageUrl(imagePath: string): string {
   }
   
   // Extract the base URL without the '/api' part
-  const baseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '');
+  const baseUrl = (
+    import.meta.env.VITE_API_URL ||
+    (import.meta.env.DEV ? 'http://localhost:5000/api' : 'https://zalya-backend.onrender.com/api')
+  ).replace(/\/api$/, '');
   
   // If the image path already starts with /uploads, just prepend the base URL
   if (imagePath.startsWith('/uploads')) {

@@ -13,6 +13,7 @@ import ProductForm from '@/components/admin/ProductForm';
 import { Product } from '@/lib/types';
 import { toast } from '@/hooks/use-toast';
 import { getImageUrl } from '@/lib/utils';
+import api from '@/services/api';
 import { 
   getDashboardSummary,
   getRecentActivities,
@@ -237,15 +238,8 @@ const Admin = () => {
   // API call functions for analytics
   const fetchAnalyticsData = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin/analytics', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (!response.ok) throw new Error('Failed to fetch analytics');
-      return await response.json();
+      const { data } = await api.get('/admin/analytics');
+      return data;
     } catch (error) {
       console.error('Error fetching analytics:', error);
       throw error;
@@ -254,15 +248,8 @@ const Admin = () => {
 
   const fetchSalesMetrics = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin/analytics/sales', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (!response.ok) throw new Error('Failed to fetch sales metrics');
-      return await response.json();
+      const { data } = await api.get('/admin/analytics/sales');
+      return data;
     } catch (error) {
       console.error('Error fetching sales metrics:', error);
       throw error;
@@ -271,15 +258,8 @@ const Admin = () => {
 
   const fetchUserMetrics = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin/analytics/users', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (!response.ok) throw new Error('Failed to fetch user metrics');
-      return await response.json();
+      const { data } = await api.get('/admin/analytics/users');
+      return data;
     } catch (error) {
       console.error('Error fetching user metrics:', error);
       throw error;
@@ -288,15 +268,7 @@ const Admin = () => {
 
   const fetchSalesTrend = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin/analytics/sales-trend', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (!response.ok) throw new Error('Failed to fetch sales trend');
-      const data = await response.json();
+      const { data } = await api.get('/admin/analytics/sales-trend');
       return data.salesTrend;
     } catch (error) {
       console.error('Error fetching sales trend:', error);
@@ -306,15 +278,7 @@ const Admin = () => {
 
   const fetchUserActivity = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin/analytics/user-activity', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (!response.ok) throw new Error('Failed to fetch user activity');
-      const data = await response.json();
+      const { data } = await api.get('/admin/analytics/user-activity');
       return data.userActivity;
     } catch (error) {
       console.error('Error fetching user activity:', error);
@@ -324,15 +288,7 @@ const Admin = () => {
 
   const fetchOrderStatus = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin/analytics/order-status', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (!response.ok) throw new Error('Failed to fetch order status');
-      const data = await response.json();
+      const { data } = await api.get('/admin/analytics/order-status');
       return data.orderStatus;
     } catch (error) {
       console.error('Error fetching order status:', error);
@@ -342,15 +298,7 @@ const Admin = () => {
 
   const fetchSalesByCategory = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin/analytics/sales-by-category', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      if (!response.ok) throw new Error('Failed to fetch sales by category');
-      const data = await response.json();
+      const { data } = await api.get('/admin/analytics/sales-by-category');
 
       if (Array.isArray(data)) {
         return data;
@@ -551,21 +499,10 @@ const Admin = () => {
     if (!editingUser) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/users/${editingUser._id}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: editingUser.name,
-          email: editingUser.email
-        })
+      const { data: updatedUser } = await api.put(`/admin/users/${editingUser._id}`, {
+        name: editingUser.name,
+        email: editingUser.email
       });
-
-      if (!response.ok) throw new Error('Failed to update user');
-
-      const updatedUser = await response.json();
       setUsers(users.map(u => u._id === editingUser._id ? updatedUser : u));
       
       toast({

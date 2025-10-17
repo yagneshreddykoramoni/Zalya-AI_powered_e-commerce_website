@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? 'http://localhost:5000/api' : 'https://zalya-backend.onrender.com/api');
+
+export const API_BASE_URL = BASE_URL;
 
 console.log('API Base URL:', BASE_URL);
 

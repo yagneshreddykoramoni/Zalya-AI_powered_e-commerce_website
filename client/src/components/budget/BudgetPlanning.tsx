@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
+import api from '@/services/api';
 
 interface BudgetAllocation {
     clothing: number;
@@ -43,17 +44,7 @@ const BudgetPlanning = () => {
         const loadBudgetData = async () => {
             try {
                 setIsLoading(true);
-                const response = await fetch(`http://localhost:5000/api/auth/get-budget/${user?.id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to load budget data');
-                }
-
-                const data = await response.json();
+                const { data } = await api.get(`/auth/get-budget/${user?.id}`);
                 if (data.budgetPlan) {
                     setBudget({
                         totalBudget: data.budgetPlan.totalBudget || 0,
@@ -101,27 +92,14 @@ const BudgetPlanning = () => {
     const handleSaveBudget = async () => {
         setIsSaving(true);
         try {
-            const response = await fetch('http://localhost:5000/api/auth/update-budget', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                    userId: user?.id,
-                    budgetPlan: {
-                        totalBudget: budget.totalBudget,
-                        allocations: budget.allocations,
-                        spending: budget.spending
-                    }
-                })
+            const { data } = await api.put('/auth/update-budget', {
+                userId: user?.id,
+                budgetPlan: {
+                    totalBudget: budget.totalBudget,
+                    allocations: budget.allocations,
+                    spending: budget.spending
+                }
             });
-
-            const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.message || 'Failed to save budget plan');
-            }
 
             await updateProfile(data.user);
             

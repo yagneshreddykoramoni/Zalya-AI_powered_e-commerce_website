@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Link } from 'react-router-dom';
 import aiChatService, { ChatMessage, FashionRecognitionResponse } from '@/services/aiChatService';
+import { API_BASE_URL } from '@/services/api';
 import { getImageUrl } from '@/lib/utils';
 
 type OutfitPlanProduct = {
@@ -187,7 +188,7 @@ const AIAssistant: React.FC = () => {
           formData.append('image', file); // Use the file object directly
 
           // Call fashion recognition API
-          const fetchResponse = await fetch('http://localhost:5000/api/ai/fashion', {
+          const fetchResponse = await fetch(`${API_BASE_URL}/ai/fashion`, {
             method: 'POST',
             body: formData, // Send as multipart/form-data
             // Do NOT set Content-Type header, browser does it automatically for FormData
@@ -302,7 +303,7 @@ const AIAssistant: React.FC = () => {
       if (currentImage) {
         const base64Image = currentImage.split(',')[1];
         
-        const fetchResponse = await fetch('http://localhost:5000/api/ai/fashion', {
+  const fetchResponse = await fetch(`${API_BASE_URL}/ai/fashion`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -375,7 +376,7 @@ const AIAssistant: React.FC = () => {
           image: msg.image,
         }));
         
-        const fetchResponse = await fetch('http://localhost:5000/api/ai/chat', {
+  const fetchResponse = await fetch(`${API_BASE_URL}/ai/chat`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
