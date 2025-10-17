@@ -8,7 +8,8 @@ Tagline: Make and define your own style! ✨
 
 **Project Overview** 🚀
 
-Zalya integrates e-commerce functionality, social engagement, and AI-driven personalization — offering users a smarter, more immersive shopping experience. Built with MERN + TypeScript, it uses modular architecture for scalability, maintainability, and smooth development.
+Zalya integrates e-commerce functionality, social engagement, and AI-driven personalization — offering users a smarter, more immersive shopping experience.
+Built with MERN + TypeScript, it uses modular architecture for scalability, maintainability, and smooth development.
 
 ---
 
@@ -42,55 +43,80 @@ Zalya integrates e-commerce functionality, social engagement, and AI-driven pers
 **Tech Stack** 🛠️
 
 Frontend: React + Vite + TypeScript, Tailwind CSS, Framer Motion, Axios
+
 Backend: Node.js + Express, MongoDB + Mongoose, JWT Authentication, Real-time updates (WebSockets / Firebase optional)
+
 AI Integrations: Groq AI / Gemini Studio for text understanding, StableVITON / TryOnDiffusion for virtual try-on
 
 ---
 
 **Folder Structure** 📁
 
+```
 Zalya-AI_powered_e-commerce_website/
-
-client/ - React Frontend
-src/components/ - UI Components
-src/pages/ - Pages: Home, Products, Community, Profile, Admin, etc.
-src/context/ - State Management
-src/utils/ - Helpers & API calls
-
-server/ - Node.js Backend
-controllers/ - Route Handlers
-models/ - MongoDB Schemas
-routes/ - API Routes
-middleware/ - Auth & Error Handling
-config/ - DB Connection & Environment
+│
+├── client/                     # React Frontend
+│   ├── src/components/         # UI Components
+│   ├── src/pages/              # Pages: Home, Products, Community, Profile, Admin, etc.
+│   ├── src/context/            # State Management
+│   ├── src/utils/              # Helpers & API calls
+│
+├── server/                     # Node.js Backend
+│   ├── controllers/            # Route Handlers
+│   ├── models/                 # MongoDB Schemas
+│   ├── routes/                 # API Routes
+│   ├── middleware/             # Auth & Error Handling
+│   ├── config/                 # DB Connection & Environment
+│
+└── README.md
+```
 
 ---
 
 **How to Run Locally** 💻
 
 1. Clone the Repository
-   git clone [https://github.com/yagneshreddykoramoni/Zalya-AI_powered_e-commerce_website.git](https://github.com/yagneshreddykoramoni/Zalya-AI_powered_e-commerce_website.git)
-   cd Zalya-AI_powered_e-commerce_website
+
+```
+git clone https://github.com/yagneshreddykoramoni/Zalya-AI_powered_e-commerce_website.git
+cd Zalya-AI_powered_e-commerce_website
+```
 
 2. Install Dependencies
-   cd client
-   npm install
-   cd ../server
-   npm install
+
+```
+cd client
+npm install
+cd ../server
+npm install
+```
 
 3. Set Up Environment Variables
-   Create a .env file inside server/ and add:
-   MONGO_URI=<your_mongodb_connection_string>
-   JWT_SECRET=<your_jwt_secret> 🔒
+
+Create a `.env` file inside `server/` and add:
+
+```
+MONGO_URI=<your_mongodb_connection_string>
+JWT_SECRET=<your_jwt_secret>
+```
+
+> 🔒 Do not share your actual MongoDB URI or JWT secret publicly.
 
 4. Run the Project
-   Run backend:
-   cd server
-   npm run dev
+
+Run backend:
+
+```
+cd server
+npm run dev
+```
 
 Run frontend:
+
+```
 cd client
 npm run dev
+```
 
 ---
 
@@ -106,22 +132,26 @@ npm run dev
 
 **Future Enhancements** 🔮
 
+* AI Voice-based Product Search 🗣️
 * AR-based Virtual Try-On for mobile 📱
 * Personalized Shopping Feeds and Trends 📰
+* AI Analytics for Admins (Sales Insights, Product Trends) 📊
 
 ---
 
 **Project Status** ✅
-Authentication System (User & Admin) — Completed
-Product, Order, and User Models — Completed
-Cart, Wishlist, and PDF Orders — Completed
-Admin Dashboard — In Progress
-AI Modules — Under Development
-Deployment — Upcoming 🚀
+
+* Authentication System (User & Admin) — Completed
+* Product, Order, and User Models — Completed
+* Cart, Wishlist, and PDF Orders — Completed
+* Admin Dashboard — In Progress
+* AI Modules — Under Development
+* Deployment — Upcoming 🚀
 
 ---
 
 **Developer** 👨‍💻
+
 K. Yagnesh Reddy
 B.Tech (CSE - Data Science), Institute of Aeronautical Engineering, Hyderabad
 Email: [yagneshreddykoramoni@gmail.com](mailto:yagneshreddykoramoni@gmail.com)
